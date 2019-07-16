@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class OnTriggerLoadLevelV2 : MonoBehaviour
+public class OnTriggerLoadLevel(2D) : MonoBehaviour
 {
 
     public GameObject enterText;
