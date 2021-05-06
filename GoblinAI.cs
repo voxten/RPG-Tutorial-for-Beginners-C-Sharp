@@ -20,13 +20,13 @@ public class GoblinAI : MonoBehaviour
         	{
             		TargetDistance = Shot.distance;
             		if (TargetDistance <= AllowedRange)
-            	{
-                	EnemySpeed = 0.02f;
-                	if (AttackTrigger == 0)
-                	{
-                    		TheEnemy.GetComponent<Animation>().Play("run");
-                    		transform.position = Vector3.MoveTowards(transform.position, ThePlayer.transform.position, EnemySpeed * Time.timeScale);
-                	}
+            		{
+                		EnemySpeed = 0.02f;
+                		if (AttackTrigger == 0)
+                		{
+                    			TheEnemy.GetComponent<Animation>().Play("run");
+                    			transform.position = Vector3.MoveTowards(transform.position, ThePlayer.transform.position, EnemySpeed * Time.timeScale);
+                		}
 			}
 			else
        			{
