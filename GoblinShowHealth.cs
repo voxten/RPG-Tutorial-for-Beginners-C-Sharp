@@ -3,18 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class GoblinShowHealth : MonoBehaviour
 {
 	public float TheDistance;
-	public GameObject ActionText;
+	public GameObject EnemyText;
 	public GameObject healthGoblin;
 	public GameObject healthBar;
 	private int healthValue;
 
-	
-	
-	
 	void Update () 
 	{
 		healthValue = GoblinEnemy.Health;
@@ -26,15 +22,15 @@ public class GoblinShowHealth : MonoBehaviour
 	{
 		if (TheDistance <= 10) 
 		{
-			ActionText.GetComponent<Text> ().text = "Goblin";
-			ActionText.SetActive (true);
+			EnemyText.GetComponent<Text> ().text = "Goblin";
+			EnemyText.SetActive (true);
 			healthGoblin.SetActive (true);
 		}		
 	}
 
 	void OnMouseExit() 
 	{
-		ActionText.SetActive (false);
+		EnemyText.SetActive (false);
 		healthGoblin.SetActive (false);
 	}
 	
