@@ -9,7 +9,7 @@ public class NPCWalkAI : MonoBehaviour
 	public GameObject NPCDest; //NPC Destination
 	
 	void Start ()
-    	{
+	{
     		Xpos = Random.Range(488, 510);
        		Zpos = Random.Range(461, 480);
         	NPCDest.transform.position = new Vector3(Xpos, 0, Zpos);
