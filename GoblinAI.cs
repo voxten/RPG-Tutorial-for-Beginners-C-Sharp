@@ -62,7 +62,7 @@ public class GoblinAI : MonoBehaviour
 		yield return new WaitForSeconds (0.68f);
 		if (GoblinEnemy.GlobalGoblin != 6)
 		{
-			HealthMonitor.HealthValue -= 10;
+			HealthMonitor.healthValue -= 10;
 		}
 		yield return new WaitForSeconds (0.2f);
 		DealingDamage = 0;
