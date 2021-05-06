@@ -7,10 +7,10 @@ using UnityEngine.SceneManagement;
 public class OnTriggerLoadLevel(3D) : MonoBehaviour
 {
 	public float TheDistance;
-	public GameObject ActionDisplay;
+	public GameObject ActionDisplay; //Example [E]
 	public GameObject ActionText;
 	public GameObject fadeOut;
-    public string levelToLoad;
+    	public string levelToLoad;
 	
 	void Update () 
 	{
@@ -22,16 +22,16 @@ public class OnTriggerLoadLevel(3D) : MonoBehaviour
 		if (TheDistance <= 3) 
 		{
 			ActionText.GetComponent<Text> ().text = "To the Beach";
-			ActionDisplay.SetActive (true);
+			//ActionDispaly.GetComponent<Text> ().text = "[E]";
 			ActionText.SetActive (true);
+			ActionDisplay.SetActive (true);
 		}
-
 		if (Input.GetButtonDown ("Action"))
-			{
+		{
 			if (TheDistance <= 3) 
 			{	
-		        fadeOut.SetActive(true);
-                StartCoroutine(TransferScene());
+		        	fadeOut.SetActive(true);
+                		StartCoroutine(TransferScene());
 			}
 		}
 	}
@@ -45,10 +45,10 @@ public class OnTriggerLoadLevel(3D) : MonoBehaviour
 	
 	IEnumerator TransferScene()
 	{
-	    ActionDisplay.SetActive (false);
+	    	ActionDisplay.SetActive (false);
 		ActionText.SetActive (false);
 		yield return new WaitForSeconds(2);
-        SceneManager.LoadScene(levelToLoad);  
+        	SceneManager.LoadScene(levelToLoad);  
 		
 	}
 	
