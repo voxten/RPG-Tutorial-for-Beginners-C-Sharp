@@ -1,72 +1,142 @@
 using System.Collections;
-using System.Collections.Generic;
+using Player;
 using UnityEngine;
 
-public class GoblinAI : MonoBehaviour
+namespace Enemy.Goblin
 {
-	public GameObject ThePlayer;
-    	public float TargetDistance;
-    	public float AllowedRange = 20;
-    	public GameObject TheEnemy;
-    	public float EnemySpeed;
-    	public int AttackTrigger;
-    	public RaycastHit Shot;
-	public int DealingDamage;
+    public class GoblinAI : MonoBehaviour
+    {
+        [Header("Bools")]
+        private bool _attackTrigger;
+        private bool _dealingDamage;
+        private bool _deathRemove;
 
-	void Update ()
-	{
-		transform.LookAt (ThePlayer.transform);
-        	if(Physics.Raycast (transform.position, transform.TransformDirection(Vector3.forward), out Shot))
-        	{
-            		TargetDistance = Shot.distance;
-            		if (TargetDistance <= AllowedRange)
-            		{
-                		EnemySpeed = 0.02f;
-                		if (AttackTrigger == 0)
-                		{
-                    			TheEnemy.GetComponent<Animation>().Play("run");
-                    			transform.position = Vector3.MoveTowards(transform.position, ThePlayer.transform.position, EnemySpeed * Time.timeScale);
-                		}
-			}
-			else
-       			{
-                		EnemySpeed = 0;
-                		TheEnemy.GetComponent<Animation>().Play("combat_idle");
-        		}
-        	}
-        	if (AttackTrigger == 1)
-        	{
-			if (DealingDamage == 0)
-			{
-				EnemySpeed = 0;
-          			TheEnemy.GetComponent<Animation>().Play("attack3");
-				StartCoroutine(TakingDamage());
-			}
-           
-       		}
-	}
+        [Header("Distance")]
+        [SerializeField] private float targetDistance;
+        [SerializeField] private float allowedRange;
+        private RaycastHit _shot;
 
-    	void OnTriggerEnter()
-    	{
-        	AttackTrigger = 1;
-    	}
+        [Header("Enemy")]
+        [SerializeField] private float enemySpeed;
+        [SerializeField] private GameObject theEnemy;
+    
+        [Header("Player")]
+        [SerializeField] private GameObject thePlayer;
+    
+        [Header("Scripts")]
+        [SerializeField] private GoblinEnemy goblinEnemyScript;
 
-    	void OnTriggerExit()
-    	{
-        	AttackTrigger = 0;
-    	}
-	
-	IEnumerator TakingDamage()
-	{
-		DealingDamage = 2;
-		yield return new WaitForSeconds (0.68f);
-		if (GoblinEnemy.GlobalGoblin != 6)
-		{
-			HealthMonitor.healthValue -= 10;
-		}
-		yield return new WaitForSeconds (0.2f);
-		DealingDamage = 0;
-	}
-	
-	
+        [Header("Rest")]
+        private int _attackCount;
+
+        private void Start() 
+        {
+            allowedRange = MonstersData.GoblinRange;
+            goblinEnemyScript = GetComponent<GoblinEnemy>();	
+        }
+
+        void Update()
+        {
+            var position = thePlayer.transform.position;
+            transform.LookAt(new Vector3(position.x, this.transform.position.y, position.z));
+            if(Physics.Raycast (transform.position, transform.TransformDirection(Vector3.forward), out _shot))
+            {
+                targetDistance = _shot.distance;
+                if (targetDistance <= allowedRange)
+                {
+                    enemySpeed = 0.005f;
+                    if (_attackTrigger == false)
+                    {
+                        if (HealthMonitor.Dead == false)
+                        {
+                            theEnemy.GetComponent<Animation>().Play("run");
+                            transform.position = Vector3.MoveTowards(transform.position, thePlayer.transform.position, enemySpeed * Time.timeScale);
+                        }
+                        else 
+                        {
+                            enemySpeed = 0;
+                            if(_deathRemove == false) 
+                            {
+                                theEnemy.GetComponent<Animation>().Play("remove_weapons");
+                                _deathRemove = true;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    enemySpeed = 0;
+                    theEnemy.GetComponent<Animation>().Play("combat_idle"); 
+                }
+            }
+		
+            if (_attackTrigger)
+            {
+                if (_dealingDamage == false)
+                {
+                    enemySpeed = 0;
+                    if (_attackCount == 0)
+                    {
+                        theEnemy.GetComponent<Animation>().Play("attack3");
+                        StartCoroutine(AttackAnim1());
+                        _attackCount = 1;
+                    }
+                    else 
+                    {
+                        theEnemy.GetComponent<Animation>().Play("attack1");
+                        StartCoroutine(AttackAnim2());
+                        _attackCount = 0;
+                    }
+                }
+            }
+        }
+
+        private void OnTriggerEnter(Collider other) 
+        {
+            if (other.CompareTag("Player"))
+            {
+                _attackTrigger = true;
+            }
+        }
+
+        private void OnTriggerStay(Collider other) 
+        {
+            if (HealthMonitor.Dead)
+            {
+                _attackTrigger = false;
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                _attackTrigger = false;
+            }
+        }
+
+        private IEnumerator AttackAnim1()
+        {
+            _dealingDamage = true;
+            yield return new WaitForSeconds (0.68f);
+            if (goblinEnemyScript.isDead != true)
+            {
+                HealthMonitor.HealthValue -= 10;
+            }
+            yield return new WaitForSeconds (0.4f);
+            _dealingDamage = false;
+        }
+
+        private IEnumerator AttackAnim2()
+        {
+            _dealingDamage = true;
+            yield return new WaitForSeconds (1.16f);
+            if (goblinEnemyScript.isDead != true)
+            {
+                HealthMonitor.HealthValue -= 50;
+            }
+            yield return new WaitForSeconds (0.4f);
+            _dealingDamage = false;
+        }
+    }
 }
