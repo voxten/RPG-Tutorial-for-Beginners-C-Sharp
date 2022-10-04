@@ -6,53 +6,45 @@ using UnityEngine.SceneManagement;
 
 public class OnTriggerLoadLevel(3D) : MonoBehaviour
 {
-	public float TheDistance;
-	public GameObject ActionDisplay; //Example [E]
-	public GameObject ActionText;
-	public GameObject fadeOut;
-    	public string levelToLoad;
+	[Header("Distance")]
+	[SerializeField] private float _theDistance;
 	
-	void Update () 
+	[Header("Action Object")]
+	[SerializeField] private string _actionText; //Example: [E] To the Beach
+	[SerializeField] private GameObject actionObject;
+
+	[Header("Load Scene")]
+	[SerializeField] private string _levelToLoad;
+	[SerializeField] private GameObject fadeOut;
+    
+	private void Update() 
 	{
-		TheDistance = PlayerCasting.DistanceFromTarget;
+		_theDistance = PlayerCasting.distanceFromTarget;
 	}
 
-	void OnMouseOver () 
+	private void OnMouseOver() 
 	{
-		if (TheDistance <= 3) 
+		if (_theDistance <= 3) 
 		{
-			ActionText.GetComponent<Text> ().text = "To the Beach";
-			//ActionDispaly.GetComponent<Text> ().text = "[E]";
-			ActionText.SetActive (true);
-			ActionDisplay.SetActive (true);
-		}
-		if (Input.GetButtonDown ("Action"))
-		{
-			if (TheDistance <= 3) 
-			{	
-		        	fadeOut.SetActive(true);
-                		StartCoroutine(TransferScene());
+			actionObject.GetComponent<Text>().text = _actionText;
+			actionObject.SetActive(true);
+			if (Input.GetButtonDown ("Action"))
+			{
+				fadeOut.SetActive(true);
+        		StartCoroutine(TransferScene());
 			}
 		}
 	}
 
-	void OnMouseExit() 
+	private void OnMouseExit() 
 	{
-		AttackBlocker.BlockSword = 0;
-		ActionDisplay.SetActive (false);
-		ActionText.SetActive (false);
+		actionObject.SetActive(false);
 	}
 	
-	IEnumerator TransferScene()
+	private IEnumerator TransferScene()
 	{
-	    	ActionDisplay.SetActive (false);
-		ActionText.SetActive (false);
+		actionObject.SetActive(false);
 		yield return new WaitForSeconds(2);
-        	SceneManager.LoadScene(levelToLoad);  
-		
+		SceneManager.LoadScene(_levelToLoad);  
 	}
-	
-	
-	
-	
 }
