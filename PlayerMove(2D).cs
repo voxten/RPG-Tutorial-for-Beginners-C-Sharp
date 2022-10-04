@@ -4,26 +4,26 @@ using UnityEngine;
 
 public class PlayerMove(2D) : MonoBehaviour
 {
-    	public float moveSpeed;
-	private Animator anim;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private Animator anim;
 	
-    	void Start()
+    private void Start()
    	{
-        	anim = GetComponent<Animator> ();
-    	}
+        anim = GetComponent<Animator>();
+    }
 
-    	void Update()
-    	{
-		if(Input.GetKey(KeyCode.D))
-		{
-		       GetComponent<Rigidbody2D> ().velocity = new Vector2 (moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+    private void Update()
+    {
+        if(Input.GetKey(KeyCode.D))
+        {
+            GetComponent<Rigidbody2D>().velocity = new Vector2 (moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
 		}
 		
-		if(Input.GetKey(KeyCode.A))
-		{
-		       GetComponent<Rigidbody2D> ().velocity = new Vector2 (-moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
-		}
+        if(Input.GetKey(KeyCode.A))
+        {
+            GetComponent<Rigidbody2D>().velocity = new Vector2 (-moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+        }
 		
-		anim.SetFloat("Speed",Mathf.Abs(GetComponent<Rigidbody2D> ().velocity.x));
-    	}
+        anim.SetFloat("Speed",Mathf.Abs(GetComponent<Rigidbody2D> ().velocity.x));
+    }
 }
