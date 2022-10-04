@@ -5,32 +5,31 @@ using UnityEngine.SceneManagement;
 
 public class OnTriggerLoadLevel(2D) : MonoBehaviour
 {
+    [SerializeField] private GameObject enterTextObject;
+    [SerializeField] private string _levelToLoad;
 
-    public GameObject enterText;
-    public string levelToLoad;
-
-    void Start()
+    private void Start()
     {
-        enterText.SetActive(false);
+        enterTextObject.SetActive(false);
     }
 
-    // Update is called once per frame
-    void OnTriggerStay2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
         if (other.tag == "Player")
         {
-            enterText.SetActive(true);
+            enterTextObject.SetActive(true);
             if (Input.GetButtonDown("Use"))
             {
-                SceneManager.LoadScene(levelToLoad);
+                SceneManager.LoadScene(_levelToLoad);
             }
         }
     }
-    void OnTriggerExit2D(Collider2D other)
+
+    private void OnTriggerExit2D(Collider2D other)
     {
         if (other.tag == "Player")
         {
-            enterText.SetActive(false);
+            enterTextObject.SetActive(false);
         }
     }
 }
