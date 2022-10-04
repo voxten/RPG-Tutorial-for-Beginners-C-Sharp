@@ -3,27 +3,25 @@ using UnityEngine.SceneManagement;
 
 public class LevelChanger : MonoBehaviour 
 {
-	public Animator animator;
-    	private int levelToLoad;
+	[SerializeField] private Animator animator;
+	private int _levelToLoad;
 
-    	void Update()
-    	{	
+	private void Update()
+	{	
 		if (Input.GetMouseButtonDown(0))
-        	{
+		{
 			FadeToLevel(1);       
-       		}
-    	}
+		}
+	}
 	
-	public void FadeToLevel (int levelIndex)
+	public void FadeToLevel(int _levelIndex)
 	{
-		levelToLoad = levelIndex;
+		_levelToLoad = _levelIndex;
 		animator.SetTrigger("FadeOut"); 
 	}
 	
-	
-	public void OnFadeComplete ()
+	public void OnFadeComplete()
 	{
 		SceneManager.LoadScene(levelToLoad);
 	}
-	
 }
